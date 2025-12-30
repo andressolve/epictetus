@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sculptor's Stone — A Story of Epictetus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #faf8f5;
+            color: #3d3d3d;
+            line-height: 1.8;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        .page {
+            min-height: 100vh;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        .page-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1200px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-section {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 55%;
+            height: 100%;
+        }
+
+        .image-section img {
+            max-height: 65vh;
+            max-width: 100%;
+            width: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #e8ddd0 0%, #d4c4b4 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8a7a6a;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .text-section {
+            flex: 1;
+            max-width: 520px;
+            padding: 20px;
+        }
+
+        .page-number {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            color: #b8a590;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 26px;
+            font-weight: normal;
+            color: #5a4a3a;
+            margin-bottom: 20px;
+        }
+
+        .text-section p {
+            margin-bottom: 14px;
+            font-size: 17px;
+        }
+
+        .text-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Cover page */
+        .cover-page {
+            background: linear-gradient(135deg, #fdf6ee 0%, #f0e6d8 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .cover-page .page-content {
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .cover-page h1 {
+            font-size: 52px;
+            color: #5a4a3a;
+            margin-bottom: 0;
+        }
+
+        .cover-page .subtitle {
+            font-size: 20px;
+            color: #8a7a6a;
+            font-style: italic;
+        }
+
+        .cover-page .intro-text {
+            max-width: 600px;
+            font-size: 18px;
+            color: #6a5a4a;
+            line-height: 1.8;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #b8a590;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+            stroke: #b8a590;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* End page */
+        .end-page {
+            background: linear-gradient(135deg, #f5ebe0 0%, #e8ddd0 100%);
+            text-align: center;
+        }
+
+        .end-page .page-content {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .end-page h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .end-page p {
+            max-width: 600px;
+            font-size: 17px;
+            line-height: 1.8;
+            color: #5a4a3a;
+        }
+
+        .end-page .quote {
+            font-style: italic;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #d4c4b4;
+            color: #6a5a4a;
+        }
+
+        .end-page .attribution {
+            font-size: 14px;
+            color: #8a7a6a;
+            margin-top: 8px;
+        }
+
+        /* Video page styling */
+        .video-page {
+            background: linear-gradient(135deg, #2a2520 0%, #1a1815 100%);
+        }
+
+        .video-page .page-content {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-page video {
+            max-width: 85%;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #d4c4b4;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .nav-dot:hover {
+            background-color: #a89080;
+            transform: scale(1.3);
+        }
+
+        .nav-dot.active {
+            background-color: #8a7a6a;
+        }
+
+        /* Text-only pages */
+        .text-only .page-content {
+            justify-content: center;
+        }
+
+        .text-only .text-section {
+            max-width: 600px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .page-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .image-section {
+                max-width: 100%;
+            }
+            .text-section {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation dots -->
+    <nav class="nav-dots">
+        <div class="nav-dot active" data-page="0"></div>
+        <div class="nav-dot" data-page="1"></div>
+        <div class="nav-dot" data-page="2"></div>
+        <div class="nav-dot" data-page="3"></div>
+        <div class="nav-dot" data-page="4"></div>
+        <div class="nav-dot" data-page="5"></div>
+        <div class="nav-dot" data-page="6"></div>
+        <div class="nav-dot" data-page="7"></div>
+        <div class="nav-dot" data-page="8"></div>
+        <div class="nav-dot" data-page="9"></div>
+        <div class="nav-dot" data-page="10"></div>
+        <div class="nav-dot" data-page="11"></div>
+        <div class="nav-dot" data-page="12"></div>
+        <div class="nav-dot" data-page="13"></div>
+        <div class="nav-dot" data-page="14"></div>
+        <div class="nav-dot" data-page="15"></div>
+        <div class="nav-dot" data-page="16"></div>
+        <div class="nav-dot" data-page="17"></div>
+        <div class="nav-dot" data-page="18"></div>
+        <div class="nav-dot" data-page="19"></div>
+        <div class="nav-dot" data-page="20"></div>
+    </nav>
+
+    <!-- Cover Page -->
+    <section class="page cover-page" id="page-0">
+        <div class="page-content">
+            <h1>The Sculptor's Stone</h1>
+            <p class="subtitle">A Story of Epictetus</p>
+            <p class="intro-text">In ancient Greece, a young man arrives late to school—muddy, bleeding, and full of excuses. An old philosopher with a limp takes him on a walk.</p>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll to begin</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Part One -->
+    <section class="page" id="page-1">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image1.png" alt="Nikos arriving late at the school courtyard">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part One</div>
+                <h1>Late</h1>
+                <p>Nikos arrived at the school with mud on his cloak and a cut on his hand.</p>
+                <p>The other students looked up from their benches as he crossed the courtyard. A few whispered. Nikos ignored them. He found a seat in the back and sat down hard, his jaw tight.</p>
+                <p>Epictetus was mid-sentence when Nikos entered. He paused, looked at the boy, then continued his lecture as if nothing had happened.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part One continued -->
+    <section class="page text-only" id="page-2">
+        <div class="page-content">
+            <div class="text-section">
+                <p>But when the lesson ended and the other students filed out to the courtyard, Epictetus remained seated. He gestured for Nikos to stay.</p>
+                <p>"You're late," the old philosopher said. His voice was matter-of-fact, not angry.</p>
+                <p>"I know."</p>
+                <p>"What happened to your hand?"</p>
+                <p>Nikos looked down at the cut. It had stopped bleeding, but it would leave a mark. "I fell. Running here."</p>
+                <p>"Running from where?"</p>
+                <p>Nikos didn't answer.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Two -->
+    <section class="page" id="page-3">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image2.png" alt="Epictetus rising from his bench with walking stick">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part Two</div>
+                <h1>The Walk</h1>
+                <p>Epictetus rose slowly from his bench, leaning on his walking stick. His bad leg—the one that had never healed right since his years as a slave—made even standing up take effort.</p>
+                <p>"Walk with me," he said.</p>
+                <p>They left the school and crossed the square toward the craftsmen's quarter. Nikos walked quickly, then had to slow down to match the old man's pace. He felt irritated by this. He felt irritated by everything.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Two continued -->
+    <section class="page text-only" id="page-4">
+        <div class="page-content">
+            <div class="text-section">
+                <p>"You were supposed to deliver your recitation this morning," Epictetus said. "To the assembly."</p>
+                <p>Nikos said nothing.</p>
+                <p>"You didn't appear. Your teacher waited. The other students waited. Eventually they moved on without you."</p>
+                <p>"I know."</p>
+                <p>"Where were you?"</p>
+                <p>Nikos kicked at a stone in the road. "I overslept."</p>
+                <p>"You overslept."</p>
+                <p>"I was up late. Helping a friend with something. I thought I would wake up in time. I didn't."</p>
+                <p>Epictetus nodded slowly. They walked in silence for a while.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Two continued -->
+    <section class="page text-only" id="page-5">
+        <div class="page-content">
+            <div class="text-section">
+                <p>"And after you woke? When you realized you had missed it?"</p>
+                <p>Nikos's face darkened. "I panicked. I ran. I took a shortcut through the ravine—the steep one with the loose rocks. I slipped, I fell, I cut my hand. By the time I got to the assembly hall, everyone was gone."</p>
+                <p>"Why did you take that path?"</p>
+                <p>"It's faster. I thought I could make up time."</p>
+                <p>"Is it a safe path?"</p>
+                <p>Nikos hesitated. "No. Everyone knows the rocks are loose there. But I was in a hurry."</p>
+                <p>"So you chose a dangerous path because you were already late. And the dangerous path made things worse."</p>
+                <p>Nikos said nothing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Three -->
+    <section class="page" id="page-6">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image3.png" alt="The sculptor's workshop with Demetrios, Epictetus, and Nikos">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part Three</div>
+                <h1>The Workshop</h1>
+                <p>They arrived at a sculptor's workshop—an open-air space with a canvas shade stretched over it, surrounded by blocks of stone in various states. Some were rough, fresh from the quarry. Others had been partially carved. One, near the back, was nearly finished: a young athlete, mid-stride, frozen in marble.</p>
+                <p>The sculptor was an older man named Demetrios. His arms were thick with muscle, his hands white with dust. He was working on a new piece—a block of grayish stone shot through with dark veins.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Three continued -->
+    <section class="page" id="page-7">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image4.png" alt="The cracked, ruined marble sculpture">
+            </div>
+            <div class="text-section">
+                <p>"Epictetus," the sculptor said, nodding. "Who's the boy?"</p>
+                <p>"A student. Nikos, this is Demetrios. He's been cutting stone for forty years."</p>
+                <p>Nikos nodded, distracted. His eyes were on the rough block. It looked wrong somehow. Flawed.</p>
+                <p>"That's an ugly piece of marble," Nikos said.</p>
+                <p>Demetrios laughed. "It is. Full of cracks. Hard veins. The quarry master apologized when he delivered it. Said it was the best he had this month."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Four -->
+    <section class="page text-only" id="page-8">
+        <div class="page-content">
+            <div class="text-section">
+                <div class="page-number">Part Four</div>
+                <h1>Difficult Stone</h1>
+                <p>"Why work with it at all?" Nikos asked. "Why not wait for better stone?"</p>
+                <p>"Because someone commissioned a statue. And this is the stone I have." Demetrios ran his hand along a dark vein in the marble. "A better sculptor than me might refuse it. But I've learned something over the years: difficult stone demands your full attention. You can't be careless with it. You can't rush."</p>
+                <p>He picked up his chisel and positioned it carefully against the block.</p>
+                <p>"With easy stone, you can get away with sloppy strikes. The marble forgives you. But this?" He tapped the dark vein. "One careless blow and the whole thing cracks. I have to think about every single cut."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Four continued -->
+    <section class="page" id="page-9">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image5.png" alt="Close-up of the sculptor's hands striking chisel against marble">
+            </div>
+            <div class="text-section">
+                <p>Demetrios struck the chisel. A small chip flew off. He examined the result, adjusted his angle, struck again.</p>
+                <p>Nikos watched. Despite himself, he was interested.</p>
+                <p>"What happens if you hit it wrong?"</p>
+                <p>Demetrios gestured toward a corner of the workshop. There, half-hidden under a cloth, was a cracked block of marble. The crack ran right through what would have been the figure's torso.</p>
+                <p>"That happens. Three weeks of work. Gone."</p>
+                <p>"What did you do wrong?"</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Four continued -->
+    <section class="page text-only" id="page-10">
+        <div class="page-content">
+            <div class="text-section">
+                <p>"I was tired. Frustrated. The stone had been fighting me all day—hard veins, unexpected faults. I got angry at it. I thought: I'll just force my way through this section. I swung hard instead of carefully." He shrugged. "The stone doesn't care that I was frustrated. The stone is just stone. My anger was my problem, not its."</p>
+                <p>Nikos was quiet.</p>
+                <p>"So now I start over. New block. Same commission. Except now I'm behind schedule and the client is annoyed." Demetrios smiled grimly. "The careless blow cost me more than the careful one would have."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Five -->
+    <section class="page" id="page-11">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image6.png" alt="Epictetus and Nikos walking through the streets">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part Five</div>
+                <h1>Stone and Chisel</h1>
+                <p>They left the workshop and walked back toward the school. The sun was higher now, the streets busier. Epictetus moved slowly, his stick tapping against the paving stones.</p>
+                <p>"I know what you're doing," Nikos said.</p>
+                <p>"What am I doing?"</p>
+                <p>"The stone is supposed to be my life. The difficult circumstances I didn't choose. And the chisel is supposed to be my decisions."</p>
+                <p>Epictetus smiled slightly. "Is that what you see?"</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Five continued -->
+    <section class="page text-only" id="page-12">
+        <div class="page-content">
+            <div class="text-section">
+                <p>"It's obvious."</p>
+                <p>"Then tell me: this morning, when you stayed up late helping your friend—was that the stone, or the chisel?"</p>
+                <p>Nikos hesitated. "The chisel. I chose to stay up."</p>
+                <p>"And when you overslept?"</p>
+                <p>"That was... also the chisel. I could have asked someone to wake me. I didn't."</p>
+                <p>"And the shortcut through the ravine?"</p>
+                <p>Nikos's jaw tightened. "The chisel."</p>
+                <p>"And now you're angry, and late, and your hand is cut, and you've missed your recitation, and people are whispering about you. How much of that came from the stone, and how much from the chisel?"</p>
+                <p>Nikos didn't answer. He didn't need to.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Six -->
+    <section class="page" id="page-13">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image7.png" alt="Epictetus and Nikos in conversation in the school courtyard">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part Six</div>
+                <h1>The Stone You Carry</h1>
+                <p>They stopped in the courtyard of the school. A few students sat in clusters, talking quietly. One of them glanced at Nikos, then looked away.</p>
+                <p>"I want to be clear about something," Epictetus said. "I'm not saying your life has been easy. I know something of your history. Your father died when you were young. Your family lost its money. You've had to work harder than some of these other students just to be here."</p>
+                <p>Nikos looked at him, surprised. He hadn't thought Epictetus knew any of that.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Six continued -->
+    <section class="page text-only" id="page-14">
+        <div class="page-content">
+            <div class="text-section">
+                <p>"That's the stone. You didn't choose it. You can't reach back through time and change it. And I won't insult you by pretending it doesn't matter, or that everyone starts from the same place. They don't."</p>
+                <p>The old philosopher shifted his weight, leaning more heavily on his stick. His leg was bothering him today. Nikos could tell.</p>
+                <p>"But Nikos—the stone is carved already. It's behind you. What's in front of you is fresh marble. And every day you make a hundred small cuts. How you spend your evenings. Whether you ask for help. Which paths you take when you're in a hurry."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Seven -->
+    <section class="page text-only" id="page-15">
+        <div class="page-content">
+            <div class="text-section">
+                <div class="page-number">Part Seven</div>
+                <h1>Bitter Mornings</h1>
+                <p>"How do you bear it?" Nikos asked suddenly.</p>
+                <p>Epictetus raised an eyebrow. "Bear what?"</p>
+                <p>"Your leg. The years you spent as a slave. How do you not—" Nikos stopped, unsure if he was being rude.</p>
+                <p>"How do I not feel bitter?"</p>
+                <p>"Yes."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Seven continued -->
+    <section class="page" id="page-16">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image8.png" alt="Epictetus looking directly at Nikos, sharing honestly">
+            </div>
+            <div class="text-section">
+                <p>Epictetus was quiet for a moment. A breeze moved through the courtyard, rustling the leaves of the olive tree in the corner.</p>
+                <p>"Some mornings, I do feel bitter. I'm not made of marble myself. I wake up and my leg aches and I think: this isn't fair. I didn't deserve what happened to me."</p>
+                <p>He looked at Nikos directly.</p>
+                <p>"But then I ask myself: what is in my power today? Not yesterday. Not the years I can't change. Today. And I find there is always something. Some lesson to teach. Some student to help. Some thought to examine." He tapped his stick against the ground. "That is where my attention belongs. Not on the stone I was given, but on the chisel I hold."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Eight -->
+    <section class="page" id="page-17">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image9.png" alt="Nikos alone, looking at the cut on his hand">
+            </div>
+            <div class="text-section">
+                <div class="page-number">Part Eight</div>
+                <h1>Fresh Marble</h1>
+                <p>Nikos stood in the courtyard for a long time after Epictetus went inside.</p>
+                <p>He thought about the recitation he had missed. He couldn't undo that. It was carved already.</p>
+                <p>He thought about the students who had seen him arrive late, muddy, bleeding. He couldn't undo their impressions. But he could decide how he acted tomorrow. And the day after.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part Eight continued -->
+    <section class="page" id="page-18">
+        <div class="page-content">
+            <div class="image-section">
+                <img src="image10.png" alt="Nikos walking toward the doorway to find his teacher">
+            </div>
+            <div class="text-section">
+                <p>He thought about his father, dead these seven years. About the money that had vanished. About the harder road he walked compared to some of the other students here.</p>
+                <p>That was the stone. Real. Heavy. His.</p>
+                <p>But the shortcut through the ravine—that had been his choice. Staying up late without a plan to wake—his choice. Running in a panic instead of walking in calmly and apologizing—his choice.</p>
+                <p>The difficult stone didn't break Demetrios's sculpture. The careless blow did.</p>
+                <p>Nikos looked down at the cut on his hand. It would heal. It would scar. He would remember.</p>
+                <p>He went to find his teacher, to apologize, and to ask if he could deliver his recitation tomorrow.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Page -->
+    <section class="page video-page" id="page-19">
+        <div class="page-content">
+            <video controls autoplay muted playsinline>
+                <source src="Video_Generation_of_Epictetus_Quote.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+    <!-- End Page -->
+    <section class="page end-page" id="page-20">
+        <div class="page-content">
+            <h1>End Note</h1>
+            <p>Epictetus was born around 50 AD in Hierapolis (modern-day Turkey). He spent his early years as a slave in Rome. His leg was permanently injured—some accounts say his master broke it; others say it was a childhood illness.</p>
+            <p>After gaining his freedom, he studied Stoic philosophy and eventually founded a school in Nicopolis, Greece, where he taught for decades.</p>
+            <p>His core teaching was simple: <em>Some things are in our power, and some things are not.</em> Our task is to recognize the difference—and to give our full attention to what we can actually control.</p>
+            <p class="quote">"Don't demand that things happen as you wish, but wish that they happen as they do happen, and you will go on well."</p>
+            <p class="attribution">— Epictetus, The Enchiridion</p>
+        </div>
+    </section>
+
+    <script>
+        const dots = document.querySelectorAll('.nav-dot');
+        const pages = document.querySelectorAll('.page');
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const pageNum = dot.getAttribute('data-page');
+                document.getElementById(`page-${pageNum}`).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const pageId = entry.target.id;
+                    const pageNum = pageId.split('-')[1];
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    const activeDot = document.querySelector(`.nav-dot[data-page="${pageNum}"]`);
+                    if (activeDot) activeDot.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        pages.forEach(page => observer.observe(page));
+
+        document.addEventListener('keydown', (e) => {
+            const currentActive = document.querySelector('.nav-dot.active');
+            if (!currentActive) return;
+            const currentPage = parseInt(currentActive.getAttribute('data-page'));
+            const maxPage = dots.length - 1;
+            
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentPage < maxPage) {
+                    document.getElementById(`page-${currentPage + 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentPage > 0) {
+                    document.getElementById(`page-${currentPage - 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
